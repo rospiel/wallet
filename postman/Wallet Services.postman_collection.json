@@ -1,0 +1,571 @@
+{
+	"info": {
+		"_postman_id": "2562bd11-3724-4e1c-9e6f-187dc50a412e",
+		"name": "Wallet Services",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "3329989"
+	},
+	"item": [
+		{
+			"name": "Test Success",
+			"item": [
+				{
+					"name": "01 - Create First Wallet",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", () => {",
+									"    pm.response.to.have.status(201)",
+									"})",
+									"",
+									"pm.test(\"Response body should have\", () => {",
+									"    var jsonResponse = pm.response.json()",
+									"    pm.expect(jsonResponse).to.have.property(\"account\")",
+									"    pm.expect(jsonResponse).to.have.property(\"agency\", \"1\")",
+									"})",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"cpf\": \"{{cpf-1}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/{{url}}/{{version-1}}",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"{{url}}",
+								"{{version-1}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "02 - Create Second Wallet",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", () => {",
+									"    pm.response.to.have.status(201)",
+									"})",
+									"",
+									"pm.test(\"Response body should have\", () => {",
+									"    var jsonResponse = pm.response.json()",
+									"    pm.expect(jsonResponse).to.have.property(\"account\")",
+									"    pm.expect(jsonResponse).to.have.property(\"agency\", \"1\")",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"cpf\": \"{{cpf-2}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/{{url}}/{{version-1}}",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"{{url}}",
+								"{{version-1}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "03 - Deposit in Wallet",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", () => {",
+									"    pm.response.to.have.status(201)",
+									"})",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"cpf\": \"{{cpf-1}}\",\n  \"amount\": {{amount-1}}\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/{{url}}/{{version-1}}/deposit",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"{{url}}",
+								"{{version-1}}",
+								"deposit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "04 - Get Wallet Balance",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {",
+									"    pm.response.to.have.status(200)",
+									"})",
+									"",
+									"pm.test(\"Response body should have\", () => {",
+									"    var jsonResponse = pm.response.json()",
+									"    var newBalanceFormatted = new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(Number(pm.environment.get(\"amount-1\")))",
+									"    pm.expect(jsonResponse).to.have.property(\"balance\", newBalanceFormatted)",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server}}/{{url}}/{{version-1}}/balance/document/:cpf",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"{{url}}",
+								"{{version-1}}",
+								"balance",
+								"document",
+								":cpf"
+							],
+							"variable": [
+								{
+									"key": "cpf",
+									"value": "{{cpf-1}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "05 -Withdrawal in Wallet",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", () => {",
+									"    pm.response.to.have.status(201)",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"amount\": {{amount-2}},\n  \"cpf\": \"{{cpf-1}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/{{url}}/{{version-1}}/withdrawal",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"{{url}}",
+								"{{version-1}}",
+								"withdrawal"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "06 - Get Wallet Balance By Date",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const today = new Date()",
+									"const date = [today.toISOString().split('T')[0], today.toTimeString().split(' ')[0]]",
+									"pm.environment.set(\"period\", date.join(\" \"))"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {",
+									"    pm.response.to.have.status(200)",
+									"})",
+									"",
+									"pm.test(\"Response body should have\", () => {",
+									"    var jsonResponse = pm.response.json()",
+									"    var newBalance = Number(pm.environment.get(\"amount-1\").replace(\",\", \"\")) - Number(pm.environment.get(\"amount-2\").replace(\",\", \"\"))",
+									"    var newBalanceFormatted = new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(newBalance)",
+									"    pm.expect(jsonResponse).to.have.property(\"balance\", newBalanceFormatted)",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server}}/{{url}}/{{version-1}}/balanceByPeriod/document/:cpf?date={{period}}",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"{{url}}",
+								"{{version-1}}",
+								"balanceByPeriod",
+								"document",
+								":cpf"
+							],
+							"query": [
+								{
+									"key": "date",
+									"value": "{{period}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "cpf",
+									"value": "{{cpf-1}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "07 - Transfer Between Wallets",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", () => {",
+									"    pm.response.to.have.status(201)",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"amount\": {{amount-3}},\n  \"targetCpf\": \"{{cpf-2}}\",\n  \"sourceCpf\": \"{{cpf-1}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/{{url}}/{{version-1}}/transfer",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"{{url}}",
+								"{{version-1}}",
+								"transfer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "08 - Get Wallet Balance",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {",
+									"    pm.response.to.have.status(200)",
+									"})",
+									"",
+									"pm.test(\"Response body should have\", () => {",
+									"    var jsonResponse = pm.response.json()",
+									"    var jsonResponse = pm.response.json()",
+									"    var newBalance = Number(pm.environment.get(\"amount-1\").replace(\",\", \"\")) - Number(pm.environment.get(\"amount-2\").replace(\",\", \"\")) - Number(pm.environment.get(\"amount-3\").replace(\",\", \"\"))",
+									"    var newBalanceFormatted = new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(newBalance)",
+									"    pm.expect(jsonResponse).to.have.property(\"balance\", newBalanceFormatted)",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server}}/{{url}}/{{version-1}}/balance/document/:cpf",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"{{url}}",
+								"{{version-1}}",
+								"balance",
+								"document",
+								":cpf"
+							],
+							"variable": [
+								{
+									"key": "cpf",
+									"value": "{{cpf-1}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Create Wallet",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"cpf\": \"74379772063\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{server}}/{{url}}/{{version-1}}",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"{{url}}",
+						"{{version-1}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Withdrawal in Wallet",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"amount\": 500.89,\n  \"cpf\": \"74379772063\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{server}}/{{url}}/{{version-1}}/withdrawal",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"{{url}}",
+						"{{version-1}}",
+						"withdrawal"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Transfer Between Wallets",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"amount\": 1.89,\n  \"targetCpf\": \"37678774060\",\n  \"sourceCpf\": \"71146736045\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{server}}/{{url}}/{{version-1}}/transfer",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"{{url}}",
+						"{{version-1}}",
+						"transfer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Deposit in Wallet",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"cpf\": \"74379772063\",\n  \"amount\": 5000.89\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{server}}/{{url}}/{{version-1}}/deposit",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"{{url}}",
+						"{{version-1}}",
+						"deposit"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Wallet Balance",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{server}}/{{url}}/{{version-1}}/balance/document/:cpf",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"{{url}}",
+						"{{version-1}}",
+						"balance",
+						"document",
+						":cpf"
+					],
+					"variable": [
+						{
+							"key": "cpf",
+							"value": "74379772063"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Wallet Balance By Date",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{server}}/{{url}}/{{version-1}}/balanceByPeriod/document/:cpf?date=2025-06-19 19:59:59",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"{{url}}",
+						"{{version-1}}",
+						"balanceByPeriod",
+						"document",
+						":cpf"
+					],
+					"query": [
+						{
+							"key": "date",
+							"value": "2025-06-19 19:59:59"
+						}
+					],
+					"variable": [
+						{
+							"key": "cpf",
+							"value": "74379772063"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
